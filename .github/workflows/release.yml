@@ -18,7 +18,7 @@ env:
   NIMONY_REPO: https://github.com/nim-lang/nimony
   # Must be a commit on nim-lang/nimony master. `git fetch <sha>` at this depth
   # only succeeds while GitHub still advertises the commit.
-  NIMONY_COMMIT: c055f59f1482e3811129dea1e1873dd2e0c056e5
+  NIMONY_COMMIT: 8f940ac15f66776f79c9525a8cb1e84ce645e0b6
 
 jobs:
   build:
@@ -38,7 +38,7 @@ jobs:
       # Before any checkout: slurped assets must keep their bytes.
       - run: git config --global core.autocrlf false
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           path: app
 
@@ -50,7 +50,7 @@ jobs:
 
       - name: Restore the nimony toolchain
         id: toolchain
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: nimony/bin
           key: nimony-${{ matrix.os }}-${{ matrix.arch }}-${{ env.NIMONY_COMMIT }}
@@ -64,22 +64,12 @@ jobs:
           7z x -y mingw.7z -o"$RUNNER_TEMP" > /dev/null
           echo "$RUNNER_TEMP/mingw64/bin" >> "$GITHUB_PATH"
 
-      - name: Install Nim devel
+      - name: Install Nim
         if: steps.toolchain.outputs.cache-hit != 'true'
-        uses: alaviss/setup-nim@0.1.1
+        uses: jiro4989/setup-nim-action@v2
         with:
-          path: nim
-          version: devel
-          architecture: ${{ matrix.cpu }}
-
-      - name: Overlay current Nim compiler sources
-        # nifler compiles Nim's parser against the host's `compiler/`, and the
-        # nightly can lag devel; nimony's CI does the same.
-        if: steps.toolchain.outputs.cache-hit != 'true'
-        run: |
-          git clone -q --depth 1 https://github.com/nim-lang/Nim nim-src
-          cp -a nim-src/compiler/. nim/compiler/
-          cp -a nim-src/lib/packages/docutils/. nim/lib/packages/docutils/
+          nim-version: 2.4.x
+          repo-token: ${{ github.token }}
 
       - name: Build the nimony toolchain
         if: steps.toolchain.outputs.cache-hit != 'true'
@@ -113,7 +103,7 @@ jobs:
           fi
           echo "name=$name" >> "$GITHUB_OUTPUT"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ${{ steps.package.outputs.name }}
           path: app/${{ steps.package.outputs.name }}
@@ -126,9 +116,9 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           path: dist
           merge-multiple: true

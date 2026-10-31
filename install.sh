@@ -1,13 +1,13 @@
 #!/bin/sh
 # Installs the tnative binary from GitHub Releases on Linux and macOS.
 #
-#   curl -fsSL https://github.com/planetis-m/test_native_ci/releases/latest/download/install.sh | sh
+#   curl -fsSL https://github.com/planetis-m/test_nimony_native/releases/latest/download/install.sh | sh
 #
 # TNATIVE_VERSION      release tag to install (default: the latest release)
 # TNATIVE_INSTALL_DIR  where to put tnative (default: ~/.local/bin)
 set -eu
 
-repo="planetis-m/test_native_ci"
+repo="planetis-m/test_nimony_native"
 version="${TNATIVE_VERSION:-latest}"
 dir="${TNATIVE_INSTALL_DIR:-$HOME/.local/bin}"
 

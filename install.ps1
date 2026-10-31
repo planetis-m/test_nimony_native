@@ -1,6 +1,6 @@
 # Installs the tnative binary from GitHub Releases on Windows.
 #
-#   irm https://github.com/planetis-m/test_native_ci/releases/latest/download/install.ps1 | iex
+#   irm https://github.com/planetis-m/test_nimony_native/releases/latest/download/install.ps1 | iex
 #
 # $env:TNATIVE_VERSION      release tag to install (default: the latest release)
 # $env:TNATIVE_INSTALL_DIR  where to put tnative.exe (default: %LOCALAPPDATA%\Programs\tnative)
@@ -8,7 +8,7 @@ $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-$repo = 'planetis-m/test_native_ci'
+$repo = 'planetis-m/test_nimony_native'
 $version = if ($env:TNATIVE_VERSION) { $env:TNATIVE_VERSION } else { 'latest' }
 $dir = if ($env:TNATIVE_INSTALL_DIR) { $env:TNATIVE_INSTALL_DIR } else { Join-Path $env:LOCALAPPDATA 'Programs\tnative' }
 
