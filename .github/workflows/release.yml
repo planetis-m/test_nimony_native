@@ -3,7 +3,9 @@ name: release
 # Builds tnative with Nimony's native backend (`nimony n`: arkham + nifasm, no C
 # compiler or system linker involved) on one native runner per target, and on a
 # `v*` tag publishes the archives, SHA256SUMS and the install scripts as a
-# GitHub Release. `workflow_dispatch` builds and tests without releasing.
+# GitHub Release. A push to the default branch and `workflow_dispatch` build and
+# test without releasing. That push also saves the toolchain cache: a tag run can
+# restore caches from the default branch, never from another tag.
 #
 # Targets are the ones nativenif can emit for: linux/amd64, linux/arm64,
 # macosx/arm64 and windows/amd64. There is no macOS x86_64 or Windows ARM64
@@ -11,6 +13,7 @@ name: release
 
 on:
   push:
+    branches: [master]
     tags: ['v*']
   workflow_dispatch:
 
